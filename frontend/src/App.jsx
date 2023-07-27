@@ -1,22 +1,31 @@
 import { useState, useEffect}  from 'react';
+import {
+  Routes, Route, Link, useMatch
+} from 'react-router-dom'
 import axios from 'axios'
 import Product from './components/Product/Product';
-import Customer from './components/Customer/Customer';
+import CustomerList from './components/CustomerList/CustomerList';
+import ProductList from './components/ProductList/ProductList';
 import { BASE_URL } from './services/config';
+import Customer from './components/Customer/Customer';
+import productService from './services/products'
 
 const App = () => {
 
   const [products, setProducts] = useState([])
   const [customers, setCustomers] = useState([])
   const [deals, setDeals] = useState([])
+  const [newDiscountPct, setNewDiscountPct] = useState("");
+
+  const match = useMatch('/products/:id')  
+  const product = match ? products.find(product => product.id === Number(match.params.id)) : null
 
   useEffect(() => { 
-    axios
-    .get(`${BASE_URL}/products`)
+    productService
+    .getAll()
     .then(response => {
-      console.log(response)
+      // console.log(response)
       setProducts(response.data)
-      console.log(products)
     })
   }, [])
 
@@ -24,9 +33,8 @@ const App = () => {
     axios
     .get(`${BASE_URL}/customers`)
     .then(response => {
-      console.log(response)
+      // console.log(response)
       setCustomers(response.data)
-      console.log(customers)
     })
   }, [])
 
@@ -34,28 +42,52 @@ const App = () => {
     axios
     .get(`${BASE_URL}/deals`)
     .then(response => {
-      console.log(response)
+      // console.log(response)
       setDeals(response.data)
-      console.log(deals)
     })
   }, [])
 
+  const padding = {
+    padding: 5
+  }
+
+  const handleDiscountChange = (event) => {
+    setNewDiscountPct(event.target.value)
+  }
+  
+  const updateDiscountPct = (event) => {
+    event.preventDefault();
+    const changedProduct = { ...product, discountPct: Number(newDiscountPct)};
+
+    productService
+      .update(product.id, changedProduct)
+      .then(response => {   
+        setProducts(response.data);       
+      })
+      .catch(error => {
+        console.log("ERROR IS ", error)
+      });
+
+    setNewDiscountPct('')
+  }
+  
+
   return(
     <div>
-    <h1>Discount Calculator</h1>
-    <h2>Products</h2>
-    <ul>
-      {products.map(product =>           
-        <Product key={product.id} product={product} />
-        )} 
-    </ul>
-    <h2>Customers</h2>
-    <ul>
-      {customers.map(customer =>           
-        <Customer key={customer.id} customer={customer}/>
-        )} 
-    </ul>
-  </div>
+      <div>
+        <Link style={padding} to="/">home</Link>
+        <Link style={padding} to="/products">products</Link>
+        <Link style={padding} to="/customers">customers</Link>
+      </div>
+
+      <Routes>
+        <Route path="/products/:id" element={<Product product={product} updateDiscountPct={()=>updateDiscountPct} newDiscountPct={newDiscountPct} handleDiscountChange={handleDiscountChange}/>} />
+        <Route path="/customers/:id" element={<Customer customers={customers} />} />
+        <Route path="/products" element={<ProductList products={products} />} />
+        <Route path="/customers" element={<CustomerList customers={customers}/>} />
+        <Route path="/" element={<ProductList products={products} />} />
+      </Routes>
+    </div>
   )
 }
 
