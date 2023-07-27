@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
+const { validateProductSchema } = require('./services/validator.js')
 
 app.use(cors())
 app.use(express.json())
@@ -87,7 +88,16 @@ app.get('/api/products', (request, response) => {
 })
 
 app.post('/api/products', (request, response) => {
-    console.log(request)
+  const newProduct = request.body
+  const {error, value } = validateProductSchema(newProduct)
+  if(!error && !products.find(product => product.id === newProduct.id)) {
+    products.push(newProduct)
+    response.json(products)
+  }
+  else {
+    throw new Error("Adding a new product failed ", error.details[0].message)
+  }
+    // console.log(request)
 })
 
 app.get('/api/products/:id', (request, response) => {
@@ -99,10 +109,15 @@ app.get('/api/products/:id', (request, response) => {
 app.put('/api/products/:id', (request, response) => {
   const id = Number(request.params.id)
   const updatedProduct = request.body
-  products = products.filter(product => product.id !== id)
-  products.push(updatedProduct)
-  // console.log("PRODUCTS NOW", products)
-  response.json(products)
+  const {error, value } = validateProductSchema(updatedProduct)
+  if(!error) {
+    products = products.filter(product => product.id !== id)
+    products.push(updatedProduct)
+    response.json(products)
+  }
+  else {
+    throw new Error("Update failed due to invalid input, ", error.details[0].message)
+  }
 })
 
 const PORT = 3001

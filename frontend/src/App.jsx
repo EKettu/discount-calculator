@@ -51,11 +51,12 @@ const App = () => {
 
     productService
       .update(product.id, changedProduct)
-      .then(response => {   
+      .then(response => {
         setProducts(response.data);       
       })
       .catch(error => {
-        console.log("ERROR IS ", error);
+        console.log(error.message)
+        alert("Update failed, please check the input");
       });
 
     setNewDiscountPct('');
