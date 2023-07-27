@@ -23,20 +23,24 @@ let customers = [
     name: 'Jane Doe',
     products: [2, 3],
     sales: 2,
+    specialDeals: []
+  },
+  {
+    id: 103,
+    name: 'Alice',
+    products: [2, 3],
+    sales: 2,
+    specialDeals: [
+      {
+      productID: 2,
+      dealPrice: 4
+      },
+        {
+      productID: 3,
+      dealPrice: 8
+      }
+  ]
   }
-]
-
-let deals = [
-    {
-        id: 1,
-        customerID: 101,
-        products: [
-            {
-                productID: 2,
-                dealPrice: 5
-            }
-        ]
-    }
 ]
 
 let products = [

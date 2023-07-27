@@ -8,24 +8,23 @@ import CustomerList from './components/CustomerList/CustomerList';
 import ProductList from './components/ProductList/ProductList';
 import { BASE_URL } from './services/config';
 import Customer from './components/Customer/Customer';
-import productService from './services/products'
+import productService from './services/products';
 
 const App = () => {
 
-  const [products, setProducts] = useState([])
-  const [customers, setCustomers] = useState([])
-  const [deals, setDeals] = useState([])
+  const [products, setProducts] = useState([]);
+  const [customers, setCustomers] = useState([]);
   const [newDiscountPct, setNewDiscountPct] = useState("");
 
-  const match = useMatch('/products/:id')  
-  const product = match ? products.find(product => product.id === Number(match.params.id)) : null
+  const match = useMatch('/products/:id');
+  const product = match ? products.find(product => product.id === Number(match.params.id)) : null;
 
   useEffect(() => { 
     productService
     .getAll()
     .then(response => {
       // console.log(response)
-      setProducts(response.data)
+      setProducts(response.data);
     })
   }, [])
 
@@ -34,16 +33,7 @@ const App = () => {
     .get(`${BASE_URL}/customers`)
     .then(response => {
       // console.log(response)
-      setCustomers(response.data)
-    })
-  }, [])
-
-  useEffect(() => { 
-    axios
-    .get(`${BASE_URL}/deals`)
-    .then(response => {
-      // console.log(response)
-      setDeals(response.data)
+      setCustomers(response.data);
     })
   }, [])
 
@@ -65,12 +55,11 @@ const App = () => {
         setProducts(response.data);       
       })
       .catch(error => {
-        console.log("ERROR IS ", error)
+        console.log("ERROR IS ", error);
       });
 
-    setNewDiscountPct('')
+    setNewDiscountPct('');
   }
-  
 
   return(
     <div>
@@ -81,7 +70,11 @@ const App = () => {
       </div>
 
       <Routes>
-        <Route path="/products/:id" element={<Product product={product} updateDiscountPct={()=>updateDiscountPct} newDiscountPct={newDiscountPct} handleDiscountChange={handleDiscountChange}/>} />
+        <Route path="/products/:id" element={<Product product={product} 
+                                                      updateDiscountPct={()=>updateDiscountPct} 
+                                                      newDiscountPct={newDiscountPct} 
+                                                      handleDiscountChange={handleDiscountChange} 
+                                                      customers={customers}/>} />
         <Route path="/customers/:id" element={<Customer customers={customers} />} />
         <Route path="/products" element={<ProductList products={products} />} />
         <Route path="/customers" element={<CustomerList customers={customers}/>} />
