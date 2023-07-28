@@ -52,14 +52,16 @@ const Product = ({ product, updateDiscountPct, newDiscountPct, handleDiscountCha
     let customerDiscountPrice = setCustomerDiscountPrice(productSalePrice, deal, saleAmountLimitExceeded, discountReason)
 
     return (
-      <div>
+      <div className="container">
         <h2>{product.name}</h2>
         <p>Normal price: {product.normalPrice}</p>
-        <Select
-          defaultValue={selectedSeason}
-          onChange={setSelectedSeason}
-          options={SEASONS}
-        />  
+        <div style={{maxWidth: 300}}> 
+          <Select
+            defaultValue={selectedSeason}
+            onChange={setSelectedSeason}
+            options={SEASONS}
+          />  
+        </div>
         <p>Seasonal discount price: {saleSeasonSelected ? seasonDiscountPrice : "no discount"}</p>
         <div>
           <h3>Discounts based on season </h3>
@@ -74,11 +76,13 @@ const Product = ({ product, updateDiscountPct, newDiscountPct, handleDiscountCha
           <h3>Customers with special deals for {product.name}</h3>
           {dealCustomerOptions.length > 0 ?
             <div>
+                <div style={{maxWidth: 400}}>
                   <Select
                   defaultValue={selectedCustomer}
                   onChange={setSelectedCustomer}
                   options={dealCustomerOptions}
                 />  
+                </div>
                 {selectedCustomer? <p>Special price for customer {selectedCustomer.name}: {customerDiscountPrice} based on {discountReason.current}</p> 
                 : "select a customer"}
           </div> 
