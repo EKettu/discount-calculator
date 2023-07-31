@@ -1,7 +1,5 @@
-import {
-    Link
-  } from 'react-router-dom';
-
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 const CustomerList = ({customers}) => {
 
@@ -19,4 +17,8 @@ const CustomerList = ({customers}) => {
     )
 }
 
-export default CustomerList
+CustomerList.propTypes = {
+    customers: PropTypes.array,
+};
+
+export default CustomerList;

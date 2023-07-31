@@ -25,8 +25,28 @@ const productSchema = Joi.object({
     saleMonths: Joi.array()
 })
 
+const customerSchema = Joi.object({
+    id: Joi.number()
+        .min(1)
+        .max(10000)
+        .required(),
+    name: Joi.string()
+        .min(2)
+        .max(100)
+        .required(),
+    products:  Joi.array(),
+    specialDeals: Joi.array(),
+    sales: Joi.number()
+        .min(1)
+        .max(10000)
+        .required()
+})
+
 module.exports = {
     validateProductSchema: function(productObject) {
         return productSchema.validate(productObject);
-    }
+    },
+    validateCustomerSchema: function(customerObject) {
+        return customerSchema.validate(customerObject);
+    },
 }

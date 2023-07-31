@@ -5,7 +5,7 @@ export let customers = [
       products: [2,3],
       specialDeals: [
           {
-              productID: 2,
+              productId: 2,
               dealPrice: 4
           }
       ],
@@ -25,11 +25,11 @@ export let customers = [
       sales: 4,
       specialDeals: [
         {
-        productID: 1,
+        productId: 1,
         dealPrice: 6
         },
           {
-        productID: 2,
+        productId: 2,
         dealPrice: 3
         }
     ]

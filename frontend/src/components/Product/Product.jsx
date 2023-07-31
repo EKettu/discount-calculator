@@ -1,8 +1,11 @@
-import {useState, useRef } from 'react'
+import {useState, useRef } from 'react';
 import {useParams} from 'react-router-dom';
-import Select from 'react-select'
-import { SEASONS, SALE_AMOUNT_DISCOUNT_PCT, SALE_AMOUNT_LIMIT } from '../../services/config';
-import {createCustomerOptions} from '../../services/utils';
+import Select from 'react-select';
+import { SEASONS } from '../../services/config';
+import {createCustomerOptions, 
+        calculateSaleAmountDiscountPrice, 
+        saleLimitExceeded} from '../../services/utils';
+import PropTypes from 'prop-types';
 
 
 const setCustomerDiscountPrice = (productSalePrice, deal, saleAmountLimitExceeded, discountReason) => {
@@ -40,16 +43,16 @@ const Product = ({ product, updateDiscountPct, newDiscountPct, handleDiscountCha
     let seasonDiscountPrice = product.normalPrice - (product.normalPrice * (product.discountPct/100))
     let saleSeasonSelected = product.saleMonths.includes(selectedSeason ? selectedSeason.value : 0) | false
 
-    const productSalePrice = product.normalPrice - (product.normalPrice * SALE_AMOUNT_DISCOUNT_PCT)
+    const productSalePrice = calculateSaleAmountDiscountPrice(product);
 
     const deal = selectedCustomer ? selectedCustomer.specialDeals.find(dealProduct => 
-      dealProduct.productID ===product.id) : null
+      dealProduct.productId ===product.id) : null;
 
-    const dealCustomerOptions = customers ? createCustomerOptions(product, customers) : []
+    const dealCustomerOptions = customers ? createCustomerOptions(product, customers) : [];
 
-    const saleAmountLimitExceeded = selectedCustomer && (selectedCustomer.sales >= SALE_AMOUNT_LIMIT)
+    const saleAmountLimitExceeded = selectedCustomer && (saleLimitExceeded(selectedCustomer));
 
-    let customerDiscountPrice = setCustomerDiscountPrice(productSalePrice, deal, saleAmountLimitExceeded, discountReason)
+    let customerDiscountPrice = setCustomerDiscountPrice(productSalePrice, deal, saleAmountLimitExceeded, discountReason);
 
     return (
       <div className="container">
@@ -100,4 +103,18 @@ const Product = ({ product, updateDiscountPct, newDiscountPct, handleDiscountCha
   )
 }
 
-export default Product
+Product.propTypes = {
+  product: PropTypes.shape({
+      name: PropTypes.string,
+      id: PropTypes.number,
+      normalPrice: PropTypes.number,
+      discountPct: PropTypes.number,
+      saleMonths: PropTypes.array,
+  }),
+  customers: PropTypes.array,
+  updateDiscountPct: PropTypes.func,
+  handleDiscountChange: PropTypes.func,
+  newDiscountPct: PropTypes.string
+};
+
+export default Product;

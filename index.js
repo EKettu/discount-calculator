@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
-const { validateProductSchema } = require('./services/validator.js')
+const { validateProductSchema, validateCustomerSchema } = require('./services/validator.js')
 
 app.use(cors())
 app.use(express.json())
@@ -13,7 +13,7 @@ let customers = [
     products: [1, 2],
     specialDeals: [
         {
-            productID: 2,
+            productId: 2,
             dealPrice: 5
         }
     ],
@@ -33,11 +33,11 @@ let customers = [
     sales: 2,
     specialDeals: [
       {
-      productID: 2,
+      productId: 2,
       dealPrice: 4
       },
         {
-      productID: 3,
+      productId: 3,
       dealPrice: 8
       }
   ]
@@ -71,16 +71,8 @@ let products = [
     }
 ]
 
-app.get('/', (request, response) => {
-  response.send('<h1>Hello World!</h1>')
-})
-
 app.get('/api/customers', (request, response) => {
   response.json(customers)
-})
-
-app.get('/api/deals', (request, response) => {
-    response.json(deals)
 })
 
 app.get('/api/products', (request, response) => {
@@ -114,6 +106,20 @@ app.put('/api/products/:id', (request, response) => {
     products = products.filter(product => product.id !== id)
     products.push(updatedProduct)
     response.json(products)
+  }
+  else {
+    throw new Error("Update failed due to invalid input, ", error.details[0].message)
+  }
+})
+
+app.put('/api/customers/:id', (request, response) => {
+  const id = Number(request.params.id)
+  const updatedCustomer = request.body
+  const {error, value } = validateCustomerSchema(updatedCustomer)
+  if(!error) {
+    customers = customers.filter(customer => customer.id !== id)
+    customers.push(updatedCustomer)
+    response.json(customers)
   }
   else {
     throw new Error("Update failed due to invalid input, ", error.details[0].message)

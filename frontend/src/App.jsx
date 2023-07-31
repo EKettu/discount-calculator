@@ -21,6 +21,7 @@ const App = () => {
   const [products, setProducts] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [newDiscountPct, setNewDiscountPct] = useState("");
+  const [newDealPrice, setNewDealPrice] = useState("");
 
   const productMatch = useMatch('/products/:id');
   const product = productMatch ? products.find(product => product.id === Number(productMatch.params.id)) : null;
@@ -49,6 +50,10 @@ const App = () => {
   const handleDiscountChange = (event) => {
     setNewDiscountPct(event.target.value)
   }
+
+  const handleDealChange = (event) => {
+    setNewDealPrice(event.target.value)
+  }
   
   const updateDiscountPct = (event) => {
     event.preventDefault();
@@ -67,6 +72,30 @@ const App = () => {
     setNewDiscountPct('');
   }
 
+  const updateDeal = (event) => {
+    const productId = Number(event.target[0].value)
+    event.preventDefault();
+    let specialDeals = customer.specialDeals
+    if(!specialDeals.some(deal => deal.productId === productId)) {
+      specialDeals.push({productId: productId, dealPrice: Number(newDealPrice)})
+    }
+    else {
+      specialDeals = specialDeals.map(deal => deal.productId === productId ? {...deal, dealPrice: Number(newDealPrice)} : deal);
+    }
+    const changedCustomer = {...customer, specialDeals: specialDeals};
+    axiosService
+      .update(customersUrl, customer.id, changedCustomer)
+      .then(response => {
+        setCustomers(response.data);       
+      })
+      .catch(error => {
+        console.log(error.message)
+        alert("Update failed, please check the input ", error.message);
+      });
+
+    setNewDealPrice('');
+  }
+
   return(
     <div className="container">
       <div>
@@ -81,7 +110,11 @@ const App = () => {
                                                       newDiscountPct={newDiscountPct} 
                                                       handleDiscountChange={handleDiscountChange} 
                                                       customers={customers}/>} />
-        <Route path="/customers/:id" element={<Customer customer={customer} products={products} />} />
+        <Route path="/customers/:id" element={<Customer customer={customer} 
+                                                        products={products} 
+                                                        updateDeal={()=>updateDeal}
+                                                        newDealPrice={newDealPrice}
+                                                        handleDealChange={handleDealChange}/>} />
         <Route path="/products" element={<ProductList products={products} />} />
         <Route path="/customers" element={<CustomerList customers={customers}/>} />
         <Route path="/" element={<ProductList products={products} />} />

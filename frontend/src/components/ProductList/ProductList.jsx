@@ -1,7 +1,5 @@
-import {
-    Link
-  } from 'react-router-dom';
-
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 const ProductList = ({products}) => {
 
@@ -19,4 +17,8 @@ const ProductList = ({products}) => {
     )
 }
 
-export default ProductList
+ProductList.propTypes = {
+    products: PropTypes.array,
+};
+
+export default ProductList;
