@@ -2,11 +2,14 @@ import { SALE_AMOUNT_LIMIT } from "./config"
 
 export const calculateDiscountPrice = (product, discounts, reason) => {
     if(discounts) {
-        const discount = discounts.find(discount => discount.reason === reason)
-        return product.normalPrice - (product.normalPrice * discount.percentage/100)
+        const discount = discounts.find(discount => discount.reason === reason);
+        return discount ? 
+            product.normalPrice - (product.normalPrice * discount.percentage/100) : 
+            product.normalPrice;
     }
     return product.normalPrice
 }
+
 export const saleLimitExceeded = (customer) => {
     return customer.sales >= SALE_AMOUNT_LIMIT;
 }
@@ -18,6 +21,11 @@ export const createCustomerOptions = (product, customers) => {
     );
     dealCustomers = dealCustomers.map(customer => ({...customer, value: customer.id, label: customer.name}));
     return dealCustomers;
+}
+
+export const createProductOptions = (products) => {
+    const productOptions = products ? products.map(product => ({...product, value: product.id, label: product.name})) : [];
+    return productOptions;
 }
 
 export const createCustomerProductOptions = (customer, products) => {

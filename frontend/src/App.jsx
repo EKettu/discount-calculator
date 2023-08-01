@@ -90,16 +90,20 @@ const App = () => {
   }
 
   const updateDeal = (event) => {
-    const productId = Number(event.target[0].value)
+    const productId = Number(event.target[0].value);
     event.preventDefault();
-    let specialDeals = customer.specialDeals
+    let specialDeals = customer.specialDeals;
     if(!specialDeals.some(deal => deal.productId === productId)) {
-      specialDeals.push({productId: productId, dealPrice: Number(newDealPrice)})
+      specialDeals.push({productId: productId, dealPrice: Number(newDealPrice)});
     }
     else {
       specialDeals = specialDeals.map(deal => deal.productId === productId ? {...deal, dealPrice: Number(newDealPrice)} : deal);
     }
-    const changedCustomer = {...customer, specialDeals: specialDeals};
+    let products = customer.products;
+    if(!products.some(prodId => prodId === productId)) {
+      products.push(productId);
+    }
+    const changedCustomer = {...customer, products: products, specialDeals: specialDeals};
     axiosService
       .update(customersUrl, customer.id, changedCustomer)
       .then(response => {

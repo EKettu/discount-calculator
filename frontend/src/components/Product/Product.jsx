@@ -5,6 +5,7 @@ import {createCustomerOptions,
         calculateDiscountPrice, 
         saleLimitExceeded} from '../../services/utils';
 import PropTypes from 'prop-types';
+import './Product.css'
 
 
 const setCustomerDiscountPrice = (productSalePrice, deal, saleAmountLimitExceeded, discountReason) => {
@@ -51,23 +52,25 @@ const Product = ({ product, discounts, customers}) => {
 
     return (
       <div className="container">
-        <h2>{product.name}</h2>
-        <p>Normal price: {product.normalPrice}</p>
-        <div style={{maxWidth: 300}}> 
-          <Select
-            placeholder='Select season'
-            defaultValue={selectedSeason}
-            onChange={setSelectedSeason}
-            options={SEASONS}
-          />  
+        <div className='season'>
+          <h2>{product.name}</h2>
+          <p>Normal price: {product.normalPrice}</p>
+          <div style={{maxWidth: 300}}> 
+            <Select
+              placeholder='Select season'
+              defaultValue={selectedSeason}
+              onChange={setSelectedSeason}
+              options={SEASONS}
+            />  
         </div>
         <div>
           {selectedSeason  && 
             <div><p>Seasonal discount price: {saleSeasonSelected ? seasonDiscountPrice : "no discount"}</p></div>
           }
         </div>
-        <div>
-          <h3>Customers with special deals for {product.name}</h3>
+        </div>
+        <div className='customers'>
+          <h4>Customers with special deals for {product.name}</h4>
           {dealCustomerOptions.length > 0 ?
             <div>
                 <div style={{maxWidth: 400}}>
