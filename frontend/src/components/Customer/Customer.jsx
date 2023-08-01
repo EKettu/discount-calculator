@@ -1,10 +1,10 @@
 import {useState} from 'react';
 import {useParams} from 'react-router-dom';
-import { createCustomerProductOptions, getProductsPriceForCustomer } from './../../services/utils';
+import { createCustomerProductOptions, getProductsPriceForCustomer, saleLimitExceeded } from './../../services/utils';
 import Select from 'react-select';
 import PropTypes from 'prop-types';
 
-const Customer = ({ customer, products, updateDeal, handleDealChange, newDealPrice }) => {
+const Customer = ({ customer, products, discounts, updateDeal, handleDealChange, newDealPrice }) => {
 
   const id = useParams().id;
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -15,8 +15,9 @@ const Customer = ({ customer, products, updateDeal, handleDealChange, newDealPri
   if(customer) {
 
     const customersProducts = createCustomerProductOptions(customer, products);
-    const specialProduct = selectedProduct ? customer.specialDeals.find(deal => deal.productId === selectedProduct.id) : false;
-    const priceText = specialProduct ? '(special price)' : '(normal price)'
+    const specialProduct = selectedProduct ? (customer.specialDeals.find(deal => deal.productId === selectedProduct.id) || saleLimitExceeded(customer)) : false;
+    const customerPrice = selectedProduct && discounts ? getProductsPriceForCustomer(customer, selectedProduct, discounts) : null;
+    const priceText = specialProduct ? '(special price)' : '(normal price)';
 
     return (
       <div>
@@ -32,9 +33,10 @@ const Customer = ({ customer, products, updateDeal, handleDealChange, newDealPri
                 />  
                 </div>
                 {selectedProduct ? 
-                  <div> <p>Price for customer {customer.name}: {getProductsPriceForCustomer(customer, selectedProduct)} {priceText}</p>
+                  <div> <p>Price for customer {customer.name}: {customerPrice} {priceText}</p>
                         <div>
                           <h4>Update product deal</h4>
+                          <p>Use the form to change static price of the product for the customer</p>
                           <form onSubmit={updateDeal(id)}> 
                             <input type="hidden" value={selectedProduct.id}/>       
                             <input value={newDealPrice} onChange={handleDealChange}/>        
@@ -78,6 +80,7 @@ Customer.propTypes = {
       specialDeals: PropTypes.array
   }),
   products: PropTypes.array,
+  discounts: PropTypes.array,
   updateDeal: PropTypes.func,
   handleDealChange: PropTypes.func,
   newDealPrice: PropTypes.string

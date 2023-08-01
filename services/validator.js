@@ -42,11 +42,29 @@ const customerSchema = Joi.object({
         .required()
 })
 
+const discountSchema = Joi.object({
+    id: Joi.number()
+        .min(1)
+        .max(10000)
+        .required(),
+    reason: Joi.string()
+        .min(2)
+        .max(100)
+        .required(),
+    percentage: Joi.number()
+        .min(0)
+        .max(100)
+        .required()
+})
+
 module.exports = {
     validateProductSchema: function(productObject) {
         return productSchema.validate(productObject);
     },
     validateCustomerSchema: function(customerObject) {
         return customerSchema.validate(customerObject);
+    },
+    validateDiscountSchema: function(discountObject) {
+        return discountSchema.validate(discountObject);
     },
 }

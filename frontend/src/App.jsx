@@ -8,9 +8,13 @@ import ProductList from './components/ProductList/ProductList';
 import Customer from './components/Customer/Customer';
 import axiosService from './services/axiosService';
 import { BASE_URL } from './services/config';
+import DiscountList from './components/DiscountList/DiscountList';
+import Discount from './components/Discount/Discount';
+import Home from './components/Home/Home'
 
 const productsUrl = `${BASE_URL}/products`
 const customersUrl = `${BASE_URL}/customers`
+const discountsUrl = `${BASE_URL}/discounts`
 
 const App = () => {
 
@@ -20,6 +24,7 @@ const App = () => {
 
   const [products, setProducts] = useState([]);
   const [customers, setCustomers] = useState([]);
+  const [discounts, setDiscounts] = useState([]);
   const [newDiscountPct, setNewDiscountPct] = useState("");
   const [newDealPrice, setNewDealPrice] = useState("");
 
@@ -29,6 +34,9 @@ const App = () => {
   const customerMatch = useMatch('/customers/:id');
   const customer = customerMatch ?customers.find(customer => customer.id === Number(customerMatch.params.id)) : null;
 
+  const discountMatch = useMatch('/discounts/:id');
+  const discount = discountMatch ? discounts.find(discount => discount.id === Number(discountMatch.params.id)) : null;
+  
   useEffect(() => { 
     axiosService
     .getAll(productsUrl)
@@ -47,6 +55,15 @@ const App = () => {
     })
   }, [])
 
+  useEffect(() => { 
+    axiosService
+    .getAll(discountsUrl)
+    .then(response => {
+      // console.log(response)
+      setDiscounts(response.data);
+    })
+  }, [])
+
   const handleDiscountChange = (event) => {
     setNewDiscountPct(event.target.value)
   }
@@ -54,15 +71,15 @@ const App = () => {
   const handleDealChange = (event) => {
     setNewDealPrice(event.target.value)
   }
-  
+
   const updateDiscountPct = (event) => {
     event.preventDefault();
-    const changedProduct = { ...product, discountPct: Number(newDiscountPct)};
+    const changedDiscount = { ...discount, percentage: Number(newDiscountPct)};
 
     axiosService
-      .update(productsUrl, product.id, changedProduct)
+      .update(discountsUrl, discount.id, changedDiscount)
       .then(response => {
-        setProducts(response.data);       
+        setDiscounts(response.data);       
       })
       .catch(error => {
         console.log(error.message)
@@ -99,25 +116,30 @@ const App = () => {
   return(
     <div className="container">
       <div>
-        <Link style={padding} to="/">home</Link>
-        <Link style={padding} to="/products">products</Link>
-        <Link style={padding} to="/customers">customers</Link>
+        <Link style={padding} to="/">Home</Link>
+        <Link style={padding} to="/products">Products</Link>
+        <Link style={padding} to="/customers">Customers</Link>
+        <Link style={padding} to="/discounts">Discounts</Link>
       </div>
 
       <Routes>
-        <Route path="/products/:id" element={<Product product={product} 
-                                                      updateDiscountPct={()=>updateDiscountPct} 
-                                                      newDiscountPct={newDiscountPct} 
-                                                      handleDiscountChange={handleDiscountChange} 
+        <Route path="/products/:id" element={<Product product={product}
+                                                      discounts={discounts}
                                                       customers={customers}/>} />
-        <Route path="/customers/:id" element={<Customer customer={customer} 
+        <Route path="/customers/:id" element={<Customer customer={customer}
+                                                        discounts={discounts}
                                                         products={products} 
                                                         updateDeal={()=>updateDeal}
                                                         newDealPrice={newDealPrice}
                                                         handleDealChange={handleDealChange}/>} />
+        <Route path="/discounts/:id" element={<Discount discount={discount} 
+                                                        updateDiscountPct={()=>updateDiscountPct} 
+                                                        newDiscountPct={newDiscountPct} 
+                                                        handleDiscountChange={handleDiscountChange} />} />
         <Route path="/products" element={<ProductList products={products} />} />
         <Route path="/customers" element={<CustomerList customers={customers}/>} />
-        <Route path="/" element={<ProductList products={products} />} />
+        <Route path="/discounts" element={<DiscountList discounts={discounts}/>} />
+        <Route path="/" element={<Home />} />
       </Routes>
     </div>
   )

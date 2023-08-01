@@ -1,7 +1,11 @@
-import { SALE_AMOUNT_LIMIT, SALE_AMOUNT_DISCOUNT_PCT } from "./config"
+import { SALE_AMOUNT_LIMIT } from "./config"
 
-export const calculateSaleAmountDiscountPrice = (product) => {
-    return product.normalPrice - (product.normalPrice * SALE_AMOUNT_DISCOUNT_PCT)
+export const calculateDiscountPrice = (product, discounts, reason) => {
+    if(discounts) {
+        const discount = discounts.find(discount => discount.reason === reason)
+        return product.normalPrice - (product.normalPrice * discount.percentage/100)
+    }
+    return product.normalPrice
 }
 export const saleLimitExceeded = (customer) => {
     return customer.sales >= SALE_AMOUNT_LIMIT;
@@ -22,12 +26,12 @@ export const createCustomerProductOptions = (customer, products) => {
     return customersProducts;
 }
 
-export const getProductsPriceForCustomer = (customer, product) => {
+export const getProductsPriceForCustomer = (customer, product, discounts) => {
     const specialDeal = customer.specialDeals.find(dealProduct => dealProduct.productId === product.id);
     let price = product.normalPrice;
     if(!specialDeal || specialDeal === undefined) {
         if(saleLimitExceeded(customer)) {
-            price = calculateSaleAmountDiscountPrice(product);
+            price = calculateDiscountPrice (product, discounts, 'sales');
             return price
         }
         else {

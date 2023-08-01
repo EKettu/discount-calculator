@@ -1,9 +1,8 @@
 import {useState, useRef } from 'react';
-import {useParams} from 'react-router-dom';
 import Select from 'react-select';
 import { SEASONS } from '../../services/config';
 import {createCustomerOptions, 
-        calculateSaleAmountDiscountPrice, 
+        calculateDiscountPrice, 
         saleLimitExceeded} from '../../services/utils';
 import PropTypes from 'prop-types';
 
@@ -32,26 +31,22 @@ const setCustomerDiscountPrice = (productSalePrice, deal, saleAmountLimitExceede
   }
 }
 
-const Product = ({ product, updateDiscountPct, newDiscountPct, handleDiscountChange, customers}) => {
-  const id = useParams().id;
+const Product = ({ product, discounts, customers}) => {
 
   const [selectedSeason, setSelectedSeason] = useState(null);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const discountReason = useRef('');
 
   if (product) {
-    let seasonDiscountPrice = product.normalPrice - (product.normalPrice * (product.discountPct/100))
+    let seasonDiscountPrice = discounts ? calculateDiscountPrice(product, discounts, 'season') : product.normalPrice;
+    const productSalePrice = discounts ? calculateDiscountPrice(product, discounts, 'sales') : product.normalPrice;
+
     let saleSeasonSelected = product.saleMonths.includes(selectedSeason ? selectedSeason.value : 0) | false
-
-    const productSalePrice = calculateSaleAmountDiscountPrice(product);
-
     const deal = selectedCustomer ? selectedCustomer.specialDeals.find(dealProduct => 
-      dealProduct.productId ===product.id) : null;
+                                      dealProduct.productId ===product.id) : null;
 
     const dealCustomerOptions = customers ? createCustomerOptions(product, customers) : [];
-
     const saleAmountLimitExceeded = selectedCustomer && (saleLimitExceeded(selectedCustomer));
-
     let customerDiscountPrice = setCustomerDiscountPrice(productSalePrice, deal, saleAmountLimitExceeded, discountReason);
 
     return (
@@ -66,15 +61,15 @@ const Product = ({ product, updateDiscountPct, newDiscountPct, handleDiscountCha
           />  
         </div>
         <p>Seasonal discount price: {saleSeasonSelected ? seasonDiscountPrice : "no discount"}</p>
-        <div>
+        {/* <div>
           <h3>Discounts based on season </h3>
           <p>Current seasonal discount percentage: {product.discountPct} %</p>
           <h4>Update discount percentage</h4>
-          <form onSubmit={updateDiscountPct(id)}>        
+          <form onSubmit={updateProductDiscountPct(id)}>        
             <input value={newDiscountPct} onChange={handleDiscountChange}/>        
             <button type="submit">update</button>      
           </form>
-        </div>
+        </div> */}
         <div>
           <h3>Customers with special deals for {product.name}</h3>
           {dealCustomerOptions.length > 0 ?
@@ -108,13 +103,10 @@ Product.propTypes = {
       name: PropTypes.string,
       id: PropTypes.number,
       normalPrice: PropTypes.number,
-      discountPct: PropTypes.number,
       saleMonths: PropTypes.array,
   }),
   customers: PropTypes.array,
-  updateDiscountPct: PropTypes.func,
-  handleDiscountChange: PropTypes.func,
-  newDiscountPct: PropTypes.string
+  discounts: PropTypes.array,
 };
 
 export default Product;
