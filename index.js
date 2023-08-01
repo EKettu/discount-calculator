@@ -1,7 +1,9 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
-const { validateProductSchema, validateCustomerSchema, validateDiscountSchema} = require('./services/validator.js')
+const { validateProductSchema, 
+        validateCustomerSchema, 
+        validateDiscountSchema} = require('./services/validator.js')
 
 app.use(cors())
 app.use(express.json())
@@ -12,64 +14,77 @@ let customers = [
     name: 'John Smith',
     products: [1, 2],
     specialDeals: [
-        {
-            productId: 2,
-            dealPrice: 5
-        }
+      {
+        productId: 2,
+        dealPrice: 5
+      }
     ],
     sales: 5
   },
   {
     id: 102,
     name: 'Jane Doe',
-    products: [2, 3],
-    sales: 2,
-    specialDeals: []
+    products: [3],
+    specialDeals: [
+      {
+        productId: 3,
+        dealPrice: 4
+      }
+    ],
+    sales: 2
   },
   {
     id: 103,
-    name: 'Alice',
-    products: [2, 3],
-    sales: 2,
+    name: 'Bob Johnson',
+    products: [1, 4],
     specialDeals: [
       {
-      productId: 2,
-      dealPrice: 4
+        productId: 1,
+        dealPrice: 8
       },
-        {
-      productId: 3,
-      dealPrice: 8
+      {
+        productId: 4,
+        dealPrice: 20
       }
-  ]
+    ],
+    sales: 10
   }
-]
+];
 
 let products = [
-    {
-        name: 'product1',
-        id: 1,
-        normalPrice: 6,
-        discountPrice: 6,
-        discountPct: 10,
-        saleMonths: [12, 6]
-    },
-    {
-        name: 'product2',
-        id: 2,
-        normalPrice: 7,
-        discountPrice: 7,
-        discountPct: 15,
-        saleMonths: [12, 6]
-    },
-    {
-        name: 'product3',
-        id: 3,
-        normalPrice: 10,
-        discountPrice: 10,
-        discountPct: 5,
-        saleMonths: [12, 6]
-    }
-]
+  {
+    name: 'Organic Almond Butter',
+    id: 1,
+    normalPrice: 10.99,
+    discountPrice: 9.89,
+    discountPct: 10,
+    saleMonths: [6, 12]
+  },
+  {
+    name: 'Fair Trade Coffee',
+    id: 2,
+    normalPrice: 19.99,
+    discountPrice: 17.99,
+    discountPct: 10,
+    saleMonths: [4, 12]
+  },
+  {
+    name: 'Organic Chia Seeds',
+    id: 3,
+    normalPrice: 5.99,
+    discountPrice: 5.09,
+    discountPct: 15,
+    saleMonths: [6, 12]
+  },
+  {
+    name: 'Natural Whey Protein',
+    id: 4,
+    normalPrice: 29.99,
+    discountPrice: 23.99,
+    discountPct: 20,
+    saleMonths: [4, 6]
+  }
+];
 
 let discounts = [
   {

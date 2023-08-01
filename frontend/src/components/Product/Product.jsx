@@ -73,7 +73,7 @@ const Product = ({ product, discounts, customers}) => {
           <h4>Customers with special deals for {product.name}</h4>
           {dealCustomerOptions.length > 0 ?
             <div>
-                <div style={{maxWidth: 400}}>
+                <div style={{maxWidth: 300}}>
                   <Select
                     placeholder='Select customer'
                     defaultValue={selectedCustomer}

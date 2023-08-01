@@ -2,12 +2,13 @@ import { useState } from 'react';
 import { SEASONS } from '../../services/config';
 import Select from 'react-select';
 import PropTypes from 'prop-types';
+import './ProductForm.css';
 
 const ProductForm = ({ createProduct }) => {
   const [newProduct, setNewProduct] = useState({
     name: '',
     normalPrice: ''
-  })
+  });
 
   const [selectedSeasons, setSelectedSeasons] = useState([]);
 
@@ -38,36 +39,41 @@ const ProductForm = ({ createProduct }) => {
     <div>
       <h2>Create a new product</h2>
 
-      <form onSubmit={addProduct}>
-      <label>
-        Product name 
-        <input
-          type="text"
-          name="name"
-          value={newProduct.name}
-          onChange={handleChange}
-        />
-      </label>
-      <label>
-        Price 
-        <input
-          type="text"
-          name="normalPrice"
-          value={newProduct.normalPrice}
-          onChange={handleChange}
-        />
-      </label>
-      <label> Sale months 
-        <Select
-                defaultValue={selectedSeasons}
-                value={selectedSeasons}
-                onChange={handleSelect}
-                options={SEASONS}
-                isMulti
-                hideSelectedOptions={true}
-            />  
+      <form className='form' onSubmit={addProduct}>
+        <label className='label' >
+            Product name 
         </label>
-        <button type="submit">save</button>
+        <input
+            className='input'
+            type="text"
+            name="name"
+            value={newProduct.name}
+            onChange={handleChange}
+        />
+        <br />
+        <label className='label' > 
+            Price 
+        </label>
+        <input
+            className='input'
+            type="text"
+            name="normalPrice"
+            value={newProduct.normalPrice}
+            onChange={handleChange}
+        />
+       
+        <br/>
+        <label className='label' > Sale months 
+            <Select className='select'
+                    defaultValue={selectedSeasons}
+                    value={selectedSeasons}
+                    onChange={handleSelect}
+                    options={SEASONS}
+                    isMulti
+                    hideSelectedOptions={true}
+                />  
+            </label>
+            <button className='button' type="submit">save</button>
       </form>
     </div>
   )
@@ -77,4 +83,4 @@ ProductForm.propTypes = {
     createProduct: PropTypes.func
 };
 
-export default ProductForm
+export default ProductForm;

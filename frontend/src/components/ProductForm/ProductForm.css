@@ -1,0 +1,19 @@
+.form {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+.label {
+    padding-bottom: 0.5rem;
+}
+.select {
+    min-width: 10rem;
+    max-width: 20rem;
+}
+.input {
+    padding-left: 1rem;
+    max-width: 10rem;
+}
+.button {
+    max-width: 10rem;
+}

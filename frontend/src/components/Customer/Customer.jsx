@@ -31,7 +31,7 @@ const Customer = ({ customer, products, discounts, updateDeal, handleDealChange,
         <p>Select a product to see the price for the customer and/or set a new static price for a product.</p>
         {productOptions.length > 0 ?
             <div >
-                <div style={{maxWidth: 400}}>
+                <div style={{maxWidth: 300}}>
                   <Select
                     placeholder='Select product'
                     defaultValue={selectedProduct}
