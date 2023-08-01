@@ -6,24 +6,18 @@ import PropTypes from 'prop-types';
 const ProductForm = ({ createProduct }) => {
   const [newProduct, setNewProduct] = useState({
     name: '',
-    normalPrice: '',
-    saleMonths: []
+    normalPrice: ''
   })
 
   const [selectedSeasons, setSelectedSeasons] = useState([]);
 
   const addProduct = (event) => {
     event.preventDefault();
-    const newSaleMonths = selectedSeasons ? selectedSeasons.map(season => season.value) : [];
-    setNewProduct({
-        ...newProduct,
-        saleMonths: newSaleMonths
-    });
-    createProduct(newProduct);
+    const saleMonths = selectedSeasons ? selectedSeasons.map(season => season.value) : [];
+    createProduct({...newProduct, saleMonths: saleMonths});
     setNewProduct({
         name: '',
-        normalPrice: '',
-        saleMonths: []
+        normalPrice: ''
       });
     setSelectedSeasons([]);
   }

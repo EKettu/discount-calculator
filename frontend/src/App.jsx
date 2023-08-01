@@ -1,16 +1,16 @@
 import { useState, useEffect}  from 'react';
 import {
   Routes, Route, Link, useMatch
-} from 'react-router-dom'
-import Product from './components/Product/Product';
-import CustomerList from './components/CustomerList/CustomerList';
-import ProductList from './components/ProductList/ProductList';
-import Customer from './components/Customer/Customer';
+} from 'react-router-dom';
+import Product from './components/Product';
+import CustomerList from './components/CustomerList';
+import ProductList from './components/ProductList';
+import Customer from './components/Customer';
 import axiosService from './services/axiosService';
 import { BASE_URL } from './services/config';
-import DiscountList from './components/DiscountList/DiscountList';
-import Discount from './components/Discount/Discount';
-import Home from './components/Home/Home'
+import DiscountList from './components/DiscountList';
+import Discount from './components/Discount';
+import Home from './components/Home'
 
 const productsUrl = `${BASE_URL}/products`
 const customersUrl = `${BASE_URL}/customers`
@@ -119,7 +119,14 @@ const App = () => {
     .then(response => {
       setProducts(response.data)
     })
-}
+  }
+  const addDiscount = (discountObject) => {    
+    axiosService
+    .create(discountsUrl, discountObject)
+    .then(response => {
+      setDiscounts(response.data)
+    })
+  }
 
   return(
     <div className="container">
@@ -146,7 +153,7 @@ const App = () => {
                                                         handleDiscountChange={handleDiscountChange} />} />
         <Route path="/products" element={<ProductList products={products} createProduct={addProduct} />} />
         <Route path="/customers" element={<CustomerList customers={customers}/>} />
-        <Route path="/discounts" element={<DiscountList discounts={discounts}/>} />
+        <Route path="/discounts" element={<DiscountList discounts={discounts} createDiscount={addDiscount}/>} />
         <Route path="/" element={<Home />} />
       </Routes>
     </div>

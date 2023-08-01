@@ -27,6 +27,7 @@ const Customer = ({ customer, products, discounts, updateDeal, handleDealChange,
             <div>
                 <div style={{maxWidth: 400}}>
                   <Select
+                    placeholder='Select product'
                     defaultValue={selectedProduct}
                     onChange={setSelectedProduct}
                     options={customersProducts}

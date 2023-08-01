@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import DiscountForm from '../DiscountForm';
 
-const DiscountList = ({discounts}) => {
+const DiscountList = ({discounts, createDiscount}) => {
 
     return (
         <div>
@@ -13,12 +14,14 @@ const DiscountList = ({discounts}) => {
                 </li>          
             )} 
         </ul>
+        <DiscountForm createDiscount={createDiscount}/>
       </div>
     )
 }
 
 DiscountList.propTypes = {
     discounts: PropTypes.array,
+    createDiscount: PropTypes.func
 };
 
 export default DiscountList;

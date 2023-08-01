@@ -55,34 +55,31 @@ const Product = ({ product, discounts, customers}) => {
         <p>Normal price: {product.normalPrice}</p>
         <div style={{maxWidth: 300}}> 
           <Select
+            placeholder='Select season'
             defaultValue={selectedSeason}
             onChange={setSelectedSeason}
             options={SEASONS}
           />  
         </div>
-        <p>Seasonal discount price: {saleSeasonSelected ? seasonDiscountPrice : "no discount"}</p>
-        {/* <div>
-          <h3>Discounts based on season </h3>
-          <p>Current seasonal discount percentage: {product.discountPct} %</p>
-          <h4>Update discount percentage</h4>
-          <form onSubmit={updateProductDiscountPct(id)}>        
-            <input value={newDiscountPct} onChange={handleDiscountChange}/>        
-            <button type="submit">update</button>      
-          </form>
-        </div> */}
+        <div>
+          {selectedSeason  && 
+            <div><p>Seasonal discount price: {saleSeasonSelected ? seasonDiscountPrice : "no discount"}</p></div>
+          }
+        </div>
         <div>
           <h3>Customers with special deals for {product.name}</h3>
           {dealCustomerOptions.length > 0 ?
             <div>
                 <div style={{maxWidth: 400}}>
                   <Select
-                  defaultValue={selectedCustomer}
-                  onChange={setSelectedCustomer}
-                  options={dealCustomerOptions}
+                    placeholder='Select customer'
+                    defaultValue={selectedCustomer}
+                    onChange={setSelectedCustomer}
+                    options={dealCustomerOptions}
                 />  
                 </div>
                 {selectedCustomer? <p>Special price for customer {selectedCustomer.name}: {customerDiscountPrice} based on {discountReason.current}</p> 
-                : "select a customer"}
+                : ""}
           </div> 
           :
           <p>No customers with special deals for {product.name} found</p>}

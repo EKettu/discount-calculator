@@ -110,7 +110,8 @@ app.post('/api/products', (request, response) => {
 })
 
 app.post('/api/customers', (request, response) => {
-  const newCustomer = request.body
+  let newCustomer = request.body
+  newCustomer = {...newCustomer, id: customers.length+1, sales: Number(newCustomer.sales)}
   const {error, value } = validateCustomerSchema(newCustomer)
   if(!error && !customers.find(customer => customer.id === newCustomer.id)) {
     customers.push(newCustomer)
@@ -122,7 +123,8 @@ app.post('/api/customers', (request, response) => {
 })
 
 app.post('/api/discounts', (request, response) => {
-  const newDiscount = request.body
+  let newDiscount = request.body
+  newDiscount = {...newDiscount, id: discounts.length+1, percentage: Number(newDiscount.percentage)}
   const {error, value } = validateDiscountSchema(newDiscount)
   if(!error && !discounts.find(discount => discount.id === newDiscount.id)) {
     discounts.push(newDiscount)
