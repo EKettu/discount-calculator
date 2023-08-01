@@ -41,7 +41,7 @@ const Product = ({ product, discounts, customers}) => {
     let seasonDiscountPrice = discounts ? calculateDiscountPrice(product, discounts, 'season') : product.normalPrice;
     const productSalePrice = discounts ? calculateDiscountPrice(product, discounts, 'sales') : product.normalPrice;
 
-    let saleSeasonSelected = product.saleMonths.includes(selectedSeason ? selectedSeason.value : 0) | false
+    const saleSeasonSelected = product.saleMonths ? product.saleMonths.includes(selectedSeason ? selectedSeason.value : 0) : false;
     const deal = selectedCustomer ? selectedCustomer.specialDeals.find(dealProduct => 
                                       dealProduct.productId ===product.id) : null;
 

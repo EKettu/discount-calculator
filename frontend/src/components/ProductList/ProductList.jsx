@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import ProductForm from '../ProductForm/ProductForm';
 
-const ProductList = ({products}) => {
+const ProductList = ({products, createProduct}) => {
 
     return (
         <div>
@@ -13,12 +14,14 @@ const ProductList = ({products}) => {
                     </li>          
                 )} 
             </ul>
+            <ProductForm createProduct={createProduct}/>  
       </div>
     )
 }
 
 ProductList.propTypes = {
     products: PropTypes.array,
+    createProduct: PropTypes.func
 };
 
 export default ProductList;

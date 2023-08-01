@@ -97,7 +97,8 @@ app.get('/api/discounts', (request, response) => {
 })
 
 app.post('/api/products', (request, response) => {
-  const newProduct = request.body
+  let newProduct = request.body
+  newProduct = {...newProduct, id: products.length+1, normalPrice: Number(newProduct.normalPrice)}
   const {error, value } = validateProductSchema(newProduct)
   if(!error && !products.find(product => product.id === newProduct.id)) {
     products.push(newProduct)

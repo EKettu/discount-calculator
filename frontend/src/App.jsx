@@ -113,6 +113,14 @@ const App = () => {
     setNewDealPrice('');
   }
 
+  const addProduct = (productObject) => {    
+    axiosService
+    .create(productsUrl, productObject)
+    .then(response => {
+      setProducts(response.data)
+    })
+}
+
   return(
     <div className="container">
       <div>
@@ -136,7 +144,7 @@ const App = () => {
                                                         updateDiscountPct={()=>updateDiscountPct} 
                                                         newDiscountPct={newDiscountPct} 
                                                         handleDiscountChange={handleDiscountChange} />} />
-        <Route path="/products" element={<ProductList products={products} />} />
+        <Route path="/products" element={<ProductList products={products} createProduct={addProduct} />} />
         <Route path="/customers" element={<CustomerList customers={customers}/>} />
         <Route path="/discounts" element={<DiscountList discounts={discounts}/>} />
         <Route path="/" element={<Home />} />

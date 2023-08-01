@@ -16,12 +16,10 @@ const productSchema = Joi.object({
         .required(),
     discountPrice: Joi.number()
         .min(1)
-        .max(10000)
-        .required(),
+        .max(10000),
     discountPct: Joi.number()
         .min(1)
-        .max(10000)
-        .required(),
+        .max(10000),
     saleMonths: Joi.array()
 })
 
