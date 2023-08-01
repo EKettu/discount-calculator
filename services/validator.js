@@ -33,7 +33,14 @@ const customerSchema = Joi.object({
         .max(100)
         .required(),
     products:  Joi.array(),
-    specialDeals: Joi.array(),
+    specialDeals: Joi.array().items(Joi.object().keys(
+        {   productId: Joi.number().required(),
+            dealPrice: Joi.number()
+                            .min(1)
+                            .max(10000)
+                            .required()
+        }
+    )),
     sales: Joi.number()
         .min(1)
         .max(10000)

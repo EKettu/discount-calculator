@@ -32,7 +32,7 @@ const App = () => {
   const product = productMatch ? products.find(product => product.id === Number(productMatch.params.id)) : null;
 
   const customerMatch = useMatch('/customers/:id');
-  const customer = customerMatch ?customers.find(customer => customer.id === Number(customerMatch.params.id)) : null;
+  const customer = customerMatch ? customers.find(customer => customer.id === Number(customerMatch.params.id)) : null;
 
   const discountMatch = useMatch('/discounts/:id');
   const discount = discountMatch ? discounts.find(discount => discount.id === Number(discountMatch.params.id)) : null;
@@ -90,16 +90,17 @@ const App = () => {
   }
 
   const updateDeal = (event) => {
-    const productId = Number(event.target[0].value);
     event.preventDefault();
-    let specialDeals = customer.specialDeals;
+    const productId = Number(event.target[0].value);
+
+    let specialDeals = [...customer.specialDeals];
     if(!specialDeals.some(deal => deal.productId === productId)) {
       specialDeals.push({productId: productId, dealPrice: Number(newDealPrice)});
     }
     else {
       specialDeals = specialDeals.map(deal => deal.productId === productId ? {...deal, dealPrice: Number(newDealPrice)} : deal);
     }
-    let products = customer.products;
+    let products = [...customer.products];
     if(!products.some(prodId => prodId === productId)) {
       products.push(productId);
     }
@@ -123,6 +124,10 @@ const App = () => {
     .then(response => {
       setProducts(response.data)
     })
+    .catch(error => {
+      console.log(error.message)
+      alert("Adding a product failed, please check the inputs ", error.message);
+    });
   }
   const addDiscount = (discountObject) => {    
     axiosService
@@ -130,6 +135,10 @@ const App = () => {
     .then(response => {
       setDiscounts(response.data)
     })
+    .catch(error => {
+      console.log(error.message)
+      alert("Adding a discount failed, please check the inputs ", error.message);
+    });
   }
 
   return(

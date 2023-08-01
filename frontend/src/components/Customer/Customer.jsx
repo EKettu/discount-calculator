@@ -17,11 +17,13 @@ const Customer = ({ customer, products, discounts, updateDeal, handleDealChange,
   const buttonText = showAll ? 'Hide product list' : 'Show product list';
 
   if(customer) {
-
     const productOptions = createProductOptions(products);
     const customersProducts = createCustomerProductOptions(customer, products);
-    const specialProduct = selectedProduct ? (customer.specialDeals.find(deal => deal.productId === selectedProduct.id) || saleLimitExceeded(customer)) : false;
-    const customerPrice = selectedProduct && discounts ? getProductsPriceForCustomer(customer, selectedProduct, discounts) : null;
+    const specialProduct = selectedProduct ? 
+                            (customer.specialDeals.find(deal => deal.productId === selectedProduct.id) 
+                            || saleLimitExceeded(customer)) : false;
+    const customerPrice = selectedProduct && discounts ? 
+                            getProductsPriceForCustomer(customer, selectedProduct, discounts) : null;
     const priceText = specialProduct ? '(special price)' : '(normal price)';
 
     return (

@@ -39,8 +39,8 @@ export const getProductsPriceForCustomer = (customer, product, discounts) => {
     let price = product.normalPrice;
     if(!specialDeal || specialDeal === undefined) {
         if(saleLimitExceeded(customer)) {
-            price = calculateDiscountPrice (product, discounts, 'sales');
-            return price
+            price = calculateDiscountPrice(product, discounts, 'sales');
+            return price;
         }
         else {
             return price;
