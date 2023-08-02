@@ -2,9 +2,9 @@ const Joi = require('joi');
 
 const productSchema = Joi.object({
     name: Joi.string()
-        .alphanum()
+        .regex(/^[a-zA-Z0-9]+( [a-zA-Z0-9]+)*$/)
         .min(3)
-        .max(30)
+        .max(50)
         .required(),
     id: Joi.number()
         .min(1)
@@ -29,6 +29,7 @@ const customerSchema = Joi.object({
         .max(10000)
         .required(),
     name: Joi.string()
+        .regex(/^[a-zA-Z]+( [a-zA-Z]+)*$/)
         .min(2)
         .max(100)
         .required(),
@@ -53,8 +54,9 @@ const discountSchema = Joi.object({
         .max(10000)
         .required(),
     reason: Joi.string()
+        .regex(/^[a-zA-Z0-9]+( [a-zA-Z0-9]+)*$/)
         .min(2)
-        .max(100)
+        .max(50)
         .required(),
     percentage: Joi.number()
         .min(0)

@@ -133,7 +133,7 @@ app.post('/api/customers', (request, response) => {
     response.json(customers)
   }
   else {
-    throw new Error("Adding a new product failed ", error.details[0].message)
+    throw new Error("Adding a new customer failed ", error.details[0].message)
   }
 })
 
@@ -146,7 +146,7 @@ app.post('/api/discounts', (request, response) => {
     response.json(discounts)
   }
   else {
-    throw new Error("Adding a new product failed ", error.details[0].message)
+    throw new Error("Adding a new discount failed ", error.details[0].message)
   }
 })
 
