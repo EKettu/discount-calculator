@@ -41,7 +41,7 @@ npm test
 
 ### TO-DO 
 
--enable adding customers from the app (now possible only via API)
--add testing
--add styling
--convert object IDs to UUIDs
+-enable adding customers from the app (now possible only via API)  
+-add testing  
+-add styling  
+-convert object IDs to UUIDs  
